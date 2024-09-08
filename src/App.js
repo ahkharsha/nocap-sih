@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Header from "./components/header";
 import Home from "./components/home";
 
-import { AuthProvider } from "./contexts/authContext";
+import { AuthProvider } from "./contexts/authContext/index/index";
 import { useNavigate, useRoutes } from "react-router-dom";
 import { doSignOut } from "./firebase/auth";
 import "./App.css";

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/authContext";
+import { useAuth } from "../../contexts/authContext/index";
 import { doSignOut } from "../../firebase/auth";
 import { User } from "lucide-react";
 
@@ -45,7 +45,7 @@ export default Header;
 
 // import React from 'react'
 // import { Link, useNavigate } from 'react-router-dom'
-// import { useAuth } from '../../contexts/authContext'
+// import { useAuth } from '../../contexts/authContext/index'
 // import { doSignOut } from '../../firebase/auth'
 
 // const Header = () => {
