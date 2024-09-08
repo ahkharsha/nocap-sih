@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--background-color);
@@ -125,7 +125,8 @@ footer {
   margin-top: 1.5rem;
 }
 
-.info-table th, .info-table td {
+.info-table th,
+.info-table td {
   border: 1px solid #e5e7eb;
   padding: 0.75rem;
 }
@@ -184,8 +185,14 @@ footer {
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  10%, 90% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
 }
 
 .environment-data {
@@ -223,4 +230,22 @@ footer {
   .info-table {
     font-size: 0.8rem;
   }
+}
+
+.status-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  font-weight: bold;
 }
