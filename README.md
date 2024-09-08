@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# UIDAI Bot Detection Portal 🚀
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview 🌐
 
-## Available Scripts
+Welcome to the UIDAI Bot Detection Portal! This project provides a secure interface for UIDAI (Unique Identification Authority of India) services, incorporating various bot detection methods using environmental parameters and user behavior analysis. Our goal is to ensure safe and human-only interactions by passively collecting and analyzing data.
 
-In the project directory, you can run:
+## Live Demo 🌟
 
-### `npm start`
+Explore the live demo here: [UIDAI Bot Detection Portal](https://nocap-sih.vercel.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features ✨
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Mouse Movement Analysis** 🖱️: Tracks and analyzes mouse movements to identify bot-like behavior based on consistency, speed, and direction changes.
+- **Typing Pattern Analysis** ⌨️: Monitors typing patterns, including speed, interval variations, and key diversity to detect bots.
+- **User Behavior Analysis** 👤: Observes scroll and click behavior to spot inconsistencies in human interactions.
+- **Time on Page Detection** ⏱️: Measures the time spent on the page to identify suspiciously fast or excessively long interactions.
+- **Browser Fingerprinting** 🕵️‍♂️: Collects browser-specific data (e.g., user agent, screen resolution) to create a unique fingerprint of the user.
+- **Network Behavior Analysis** 🌐: Analyzes the frequency and timing of network requests to detect abnormal patterns.
 
-### `npm test`
+## Installation 💻
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/yourusername/uidai-bot-detection-portal.git
+    ```
 
-### `npm run build`
+2. **Navigate into the directory**:
+    ```bash
+    cd uidai-bot-detection-portal
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. **Run the app**:
+    ```bash
+    npm start
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Usage 🛠️
 
-### `npm run eject`
+1. **Interact with the Portal**: Begin by interacting with the portal to allow data collection.
+2. **Data Collection**: The system will passively collect and analyze data based on your mouse movements, typing patterns, and behavior.
+3. **Detection Statuses**: View the bot detection statuses for various methods directly in the UI.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tech Stack 💻
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Frontend**: React ⚛️
+- **Authentication**: Google Firebase Authentication 🔒
+- **Bot Detection**: Custom algorithms for behavior analysis and fingerprinting 🧠
+- **Backend**: AI/ML processing (coming soon) 🤖
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Future Improvements 🚀
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Integration with backend AI/ML for advanced pattern analysis.
+- Real-time bot detection enhancements.
+- UI/UX improvements and responsive design updates.
 
-## Learn More
+## License 📜
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ahkharsha/nocap-sih/blob/main/LICENSE) file for details.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contact 📧
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For any questions or issues, please reach out to [Harsha Kumar](mailto:ahkharsha@gmail.com).
