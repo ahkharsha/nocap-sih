@@ -16,7 +16,6 @@ const Login = () => {
         if(!isSigningIn) {
             setIsSigningIn(true)
             await doSignInWithEmailAndPassword(email, password)
-            // doSendEmailVerification()
         }
     }
 
@@ -31,62 +30,62 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className="bg-gray-100 min-h-screen flex items-center justify-center">
             {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
 
-            <main className="w-full h-screen flex self-center place-content-center place-items-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
-                    <div className="text-center">
-                        <div className="mt-2">
-                            <h3 className="text-gray-800 text-xl font-semibold sm:text-2xl">Welcome Back</h3>
-                        </div>
+            <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Welcome Back</h2>
+                <form onSubmit={onSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="email">
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            autoComplete='email'
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
                     </div>
-                    <form
-                        onSubmit={onSubmit}
-                        className="space-y-5"
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            autoComplete='current-password'
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                    {errorMessage && (
+                        <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
+                    )}
+                    <button
+                        type="submit"
+                        disabled={isSigningIn}
+                        className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+                            isSigningIn
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                        }`}
                     >
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                autoComplete='email'
-                                required
-                                value={email} onChange={(e) => { setEmail(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                autoComplete='current-password'
-                                required
-                                value={password} onChange={(e) => { setPassword(e.target.value) }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-                        {errorMessage && (
-                            <span className='text-red-600 font-bold'>{errorMessage}</span>
-                        )}
-
-                        <button
-                            type="submit"
-                            disabled={isSigningIn}
-                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300'}`}
-                        >
-                            {isSigningIn ? 'Signing In...' : 'Sign In'}
-                        </button>
-                    </form>
-                    <p className="text-center text-sm">Don't have an account? <Link to={'/register'} className="hover:underline font-bold">Sign up</Link></p>
-                </div>
-            </main>
+                        {isSigningIn ? 'Signing In...' : 'Sign In'}
+                    </button>
+                </form>
+                <p className="mt-8 text-center text-sm text-gray-600">
+                    Don't have an account?{' '}
+                    <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                        Sign up
+                    </Link>
+                </p>
+            </div>
         </div>
     )
 }

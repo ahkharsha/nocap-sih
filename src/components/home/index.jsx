@@ -346,7 +346,7 @@ const Home = ({ captureEnvironment, environmentData }) => {
         {currentUser.displayName ? currentUser.displayName : currentUser.email}
       </p>
       <br />
-      <div id="message">Interact naturally with the page...</div>
+      <div id="message">Interact naturally with the page... This page uses the </div>
       <br />
       <div className="input-area">
         <label htmlFor="textInput">Type here for analysis:</label>
