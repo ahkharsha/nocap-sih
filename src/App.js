@@ -7,7 +7,6 @@ import Home from "./components/home";
 
 import { AuthProvider } from "./contexts/authContext/index/index";
 import { useNavigate, useRoutes } from "react-router-dom";
-import { doSignOut } from "./firebase/auth";
 import "./App.css";
 
 function App() {
