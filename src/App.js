@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import Header from "./components/header";
 import Home from "./components/home";
 
-import { AuthProvider } from "../src/contexts/authContext/index";
+import { AuthProvider } from "./contexts/authContext/authCont";
 import { useNavigate, useRoutes } from "react-router-dom";
 import "./App.css";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../../contexts/authContext/index";
+import { useAuth } from "../../contexts/authContext/authCont";
 
 const Home = ({ captureEnvironment, environmentData }) => {
   const { currentUser } = useAuth();

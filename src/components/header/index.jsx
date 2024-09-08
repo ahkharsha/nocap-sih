@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/authContext/index";
+import { useAuth } from "../../contexts/authContext/authCont";
 import { doSignOut } from "../../firebase/auth";
 import { User } from "lucide-react";
 
