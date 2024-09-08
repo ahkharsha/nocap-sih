@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { BrowserRoute, Routes, Route } from "react-router-dom";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import AuthSection from "./Components/AuthSection";
-import CaptchaSection from "./Components/CaptchaSection";
-import Popup from "./Components/Popup";
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
+import Footer from "./components/Footer";
+import Header from "./components/header";
+import Home from "./components/home";
+
+import { AuthProvider } from "./contexts/authContext";
+import { useNavigate, useRoutes } from "react-router-dom";
+import { doSignOut } from "./firebase/auth";
 import "./App.css";
 
-const App = () => {
+function App() {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
   const [environmentData, setEnvironmentData] = useState([]);
@@ -22,13 +26,6 @@ const App = () => {
     } else {
       showPopup("Invalid credentials. Please try again.");
     }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUsername("");
-    setShowProfile(false);
-    showPopup("You have been logged out.");
   };
 
   const captureEnvironment = () => {
@@ -53,28 +50,39 @@ const App = () => {
     setTimeout(() => setPopupMessage(""), 3000);
   };
 
-  return (
-    <div className="gov-website">
-      <Header
-        isAuthenticated={isAuthenticated}
-        showProfile={showProfile}
-        setShowProfile={setShowProfile}
-        handleLogout={handleLogout}
-      />
-      <main className="container">
-        {!isAuthenticated ? (
-          <AuthSection handleLogin={handleLogin} />
-        ) : (
-          <CaptchaSection
+  const routesArray = [
+    {
+      path: "*",
+      element: <Login />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/home",
+      element: (
+        <main className="container">
+          <Home
             captureEnvironment={captureEnvironment}
             environmentData={environmentData}
           />
-        )}
-      </main>
-      <Footer />
-      {popupMessage && <Popup message={popupMessage} />}
-    </div>
+        </main>
+      ),
+    },
+  ];
+  let routesElement = useRoutes(routesArray);
+  return (
+    <AuthProvider>
+      <Header showProfile={showProfile} setShowProfile={setShowProfile} />
+      <div className="w-full h-screen flex flex-col">{routesElement}</div>
+      {/* <Footer /> */}
+    </AuthProvider>
   );
-};
+}
 
 export default App;
