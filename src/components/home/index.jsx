@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext/authCont";
 
 const Home = ({ captureEnvironment, environmentData }) => {
   const { currentUser } = useAuth();
-  const [mouseStatus, setMouseStatus] = useState('❓');
-  const [typingStatus, setTypingStatus] = useState('❓');
-  const [behaviorStatus, setBehaviorStatus] = useState('❓');
-  const [timeOnPageStatus, setTimeOnPageStatus] = useState('❓');
-  const [fingerPrintStatus, setFingerPrintStatus] = useState('❓');
-  const [networkStatus, setNetworkStatus] = useState('❓');
+  const [mouseStatus, setMouseStatus] = useState("❓");
+  const [typingStatus, setTypingStatus] = useState("❓");
+  const [behaviorStatus, setBehaviorStatus] = useState("❓");
+  const [timeOnPageStatus, setTimeOnPageStatus] = useState("❓");
+  const [fingerPrintStatus, setFingerPrintStatus] = useState("❓");
+  const [networkStatus, setNetworkStatus] = useState("❓");
+  const [rapidClickStatus, setRapidClickStatus] = useState("❓");
 
   // Mouse movement detection
   useEffect(() => {
-    let lastMouseX = 0, lastMouseY = 0;
-    let totalDistance = 0, lastAngle = null, changesInDirection = 0;
+    let lastMouseX = 0,
+      lastMouseY = 0;
+    let totalDistance = 0,
+      lastAngle = null,
+      changesInDirection = 0;
     let maxSamples = 50;
     let samples = [];
 
@@ -22,7 +26,7 @@ const Home = ({ captureEnvironment, environmentData }) => {
     }
 
     function getAngle(x1, y1, x2, y2) {
-      return Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+      return (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
     }
 
     function analyzeMousePattern() {
@@ -52,8 +56,9 @@ const Home = ({ captureEnvironment, environmentData }) => {
         lastAngle = angle;
       }
 
-      let isBot = consistentDirection || averageSpeed > 1000 || changesInDirection < 2;
-      setMouseStatus(isBot ? '❌' : '✔️');
+      let isBot =
+        consistentDirection || averageSpeed > 1000 || changesInDirection < 2;
+      setMouseStatus(isBot ? "❌" : "✔️");
     }
 
     const handleMouseMove = (event) => {
@@ -62,7 +67,12 @@ const Home = ({ captureEnvironment, environmentData }) => {
       let currentTime = Date.now();
 
       if (lastMouseX !== 0 && lastMouseY !== 0) {
-        let distance = getDistance(lastMouseX, lastMouseY, currentMouseX, currentMouseY);
+        let distance = getDistance(
+          lastMouseX,
+          lastMouseY,
+          currentMouseX,
+          currentMouseY
+        );
         totalDistance += distance;
         samples.push({ x: currentMouseX, y: currentMouseY, time: currentTime });
 
@@ -77,10 +87,10 @@ const Home = ({ captureEnvironment, environmentData }) => {
       lastMouseY = currentMouseY;
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -92,8 +102,11 @@ const Home = ({ captureEnvironment, environmentData }) => {
 
   const handleKeyPress = (event) => {
     const currentTime = Date.now();
-    setTypingData(prevData => ({
-      keyPresses: [...prevData.keyPresses, { key: event.key, time: currentTime }],
+    setTypingData((prevData) => ({
+      keyPresses: [
+        ...prevData.keyPresses,
+        { key: event.key, time: currentTime },
+      ],
       lastKeyPressTime: currentTime,
     }));
   };
@@ -103,18 +116,25 @@ const Home = ({ captureEnvironment, environmentData }) => {
       if (typingData.keyPresses.length < 10) return;
 
       const keyPresses = typingData.keyPresses;
-      const totalTypingTime = keyPresses[keyPresses.length - 1].time - keyPresses[0].time;
+      const totalTypingTime =
+        keyPresses[keyPresses.length - 1].time - keyPresses[0].time;
       const averageInterval = totalTypingTime / (keyPresses.length - 1);
-      const intervalVariances = keyPresses.slice(1).map((press, index) => 
-        Math.abs(press.time - keyPresses[index].time - averageInterval)
-      );
-      const averageVariance = intervalVariances.reduce((sum, variance) => sum + variance, 0) / intervalVariances.length;
-      
-      const uniqueKeysRatio = new Set(keyPresses.map(press => press.key)).size / keyPresses.length;
+      const intervalVariances = keyPresses
+        .slice(1)
+        .map((press, index) =>
+          Math.abs(press.time - keyPresses[index].time - averageInterval)
+        );
+      const averageVariance =
+        intervalVariances.reduce((sum, variance) => sum + variance, 0) /
+        intervalVariances.length;
+
+      const uniqueKeysRatio =
+        new Set(keyPresses.map((press) => press.key)).size / keyPresses.length;
       const typingSpeed = (keyPresses.length / totalTypingTime) * 1000; // keys per second
 
-      const isBot = averageVariance < 10 || uniqueKeysRatio < 0.3 || typingSpeed > 15;
-      setTypingStatus(isBot ? '❌' : '✔️');
+      const isBot =
+        averageVariance < 10 || uniqueKeysRatio < 0.3 || typingSpeed > 15;
+      setTypingStatus(isBot ? "❌" : "✔️");
     };
 
     if (typingData.keyPresses.length >= 10) {
@@ -127,6 +147,7 @@ const Home = ({ captureEnvironment, environmentData }) => {
     let scrollCount = 0;
     let clickCount = 0;
     let lastInteractionTime = Date.now();
+    let clickTimes = [];
 
     const handleScroll = () => {
       scrollCount++;
@@ -136,28 +157,46 @@ const Home = ({ captureEnvironment, environmentData }) => {
 
     const handleClick = () => {
       clickCount++;
-      lastInteractionTime = Date.now();
+      const currentTime = Date.now();
+      clickTimes.push(currentTime);
+
+      // Keep only the last 4 click times
+      if (clickTimes.length > 4) {
+        clickTimes.shift();
+      }
+
+      lastInteractionTime = currentTime;
       analyzeBehavior();
+      analyzeRapidClicks();
     };
 
     const analyzeBehavior = () => {
       const currentTime = Date.now();
       const timeSinceLastInteraction = currentTime - lastInteractionTime;
-      
-      // Check for unnaturally consistent behavior or lack of expected human behavior
-      const isBot = (scrollCount > 100 && clickCount === 0) || 
-                    (clickCount > 50 && scrollCount === 0) ||
-                    timeSinceLastInteraction > 300000; // 5 minutes without interaction
 
-      setBehaviorStatus(isBot ? '❌' : '✔️');
+      // Check for unnaturally consistent behavior or lack of expected human behavior
+      const isBot =
+        (scrollCount > 100 && clickCount === 0) ||
+        (clickCount > 50 && scrollCount === 0) ||
+        timeSinceLastInteraction > 300000; // 5 minutes without interaction
+
+      setBehaviorStatus(isBot ? "❌" : "✔️");
     };
 
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('click', handleClick);
+    const analyzeRapidClicks = () => {
+      if (clickTimes.length === 4) {
+        const timeBetweenClicks = clickTimes[3] - clickTimes[0];
+        const isBot = timeBetweenClicks < 400; // Less than 400ms for 4 clicks
+        setRapidClickStatus(isBot ? "✔️" : "❌");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("click", handleClick);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('click', handleClick);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", handleClick);
     };
   }, []);
 
@@ -166,10 +205,10 @@ const Home = ({ captureEnvironment, environmentData }) => {
     const startTime = Date.now();
     const interval = setInterval(() => {
       const timeSpent = (Date.now() - startTime) / 1000; // time in seconds
-      
+
       // Most bots spend very little time on a page, while some might stay indefinitely
       const isBot = timeSpent < 5 || timeSpent > 3600; // less than 5 seconds or more than an hour
-      setTimeOnPageStatus(isBot ? '❌' : '✔️');
+      setTimeOnPageStatus(isBot ? "❌" : "✔️");
     }, 5000); // Check every 5 seconds
 
     return () => clearInterval(interval);
@@ -189,18 +228,23 @@ const Home = ({ captureEnvironment, environmentData }) => {
         cpuClass: navigator.cpuClass,
         platform: navigator.platform,
         doNotTrack: navigator.doNotTrack,
-        plugins: Array.from(navigator.plugins).map(p => p.name).join(';'),
+        plugins: Array.from(navigator.plugins)
+          .map((p) => p.name)
+          .join(";"),
       };
 
       const fingerprintString = JSON.stringify(fingerprint);
       const hash = btoa(fingerprintString); // Simple base64 encoding for demonstration
 
       // Check if the fingerprint is suspiciously generic or matches known bot fingerprints
-      const isBot = hash === 'KNOWN_BOT_HASH' || !fingerprint.plugins || fingerprint.cpuClass === undefined;
-      
+      const isBot =
+        hash === "KNOWN_BOT_HASH" ||
+        !fingerprint.plugins ||
+        fingerprint.cpuClass === undefined;
+
       // Set the status to ✔️ after 2 seconds
       setTimeout(() => {
-        setFingerPrintStatus('✔️');
+        setFingerPrintStatus("✔️");
       }, 2000);
     };
 
@@ -216,25 +260,26 @@ const Home = ({ captureEnvironment, environmentData }) => {
       requestCount++;
       const currentTime = Date.now();
       const timeSinceLastRequest = currentTime - lastRequestTime;
-      
-      // Check for unnaturally consistent or rapid requests
-      const isBot = (requestCount > 50 && timeSinceLastRequest < 100) || // More than 50 requests with less than 100ms between them
-                    (requestCount > 100 && (currentTime - lastRequestTime) < 10000); // More than 100 requests in less than 10 seconds
 
-      setNetworkStatus(isBot ? '❌' : '✔️');
+      // Check for unnaturally consistent or rapid requests
+      const isBot =
+        (requestCount > 50 && timeSinceLastRequest < 100) || // More than 50 requests with less than 100ms between them
+        (requestCount > 100 && currentTime - lastRequestTime < 10000); // More than 100 requests in less than 10 seconds
+
+      setNetworkStatus(isBot ? "❌" : "✔️");
       lastRequestTime = currentTime;
     };
 
     // Intercept all fetch requests
     const originalFetch = window.fetch;
-    window.fetch = function() {
+    window.fetch = function () {
       analyzeNetworkBehavior();
       return originalFetch.apply(this, arguments);
     };
 
     // Intercept all XMLHttpRequests
     const originalXHROpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function() {
+    XMLHttpRequest.prototype.open = function () {
       analyzeNetworkBehavior();
       return originalXHROpen.apply(this, arguments);
     };
@@ -315,7 +360,8 @@ const Home = ({ captureEnvironment, environmentData }) => {
           width: 100%;
           border-collapse: collapse;
         }
-        .info-table th, .info-table td {
+        .info-table th,
+        .info-table td {
           border: 1px solid var(--secondary-color);
           padding: 8px;
           text-align: left;
@@ -326,12 +372,48 @@ const Home = ({ captureEnvironment, environmentData }) => {
         }
       `}</style>
       <div className="status-box" id="status-box">
-        <div>Mouse Tracking: <span className="status-symbol" id="status-symbol">{mouseStatus}</span></div>
-        <div>Keyboard Input: <span className="status-symbol" id="typing-status">{typingStatus}</span></div>
-        <div>User Behavior: <span className="status-symbol" id="behavior-status">{behaviorStatus}</span></div>
-        <div>Time on Page: <span className="status-symbol" id="time-status">{timeOnPageStatus}</span></div>
-        <div>Browser Fingerprint: <span className="status-symbol" id="fingerprint-status">{fingerPrintStatus}</span></div>
-        <div>Network Behavior: <span className="status-symbol" id="network-status">{networkStatus}</span></div>
+        <div>
+          Mouse Tracking:{" "}
+          <span className="status-symbol" id="status-symbol">
+            {mouseStatus}
+          </span>
+        </div>
+        <div>
+          Keyboard Input:{" "}
+          <span className="status-symbol" id="typing-status">
+            {typingStatus}
+          </span>
+        </div>
+        <div>
+          User Behavior:{" "}
+          <span className="status-symbol" id="behavior-status">
+            {behaviorStatus}
+          </span>
+        </div>
+        <div>
+          Time on Page:{" "}
+          <span className="status-symbol" id="time-status">
+            {timeOnPageStatus}
+          </span>
+        </div>
+        <div>
+          Browser Fingerprint:{" "}
+          <span className="status-symbol" id="fingerprint-status">
+            {fingerPrintStatus}
+          </span>
+        </div>
+        <div>
+          Network Behavior:{" "}
+          <span className="status-symbol" id="network-status">
+            {networkStatus}
+          </span>
+        </div>
+        <div>
+          Rapid Clicks:{" "}
+          <span className="status-symbol" id="rapid-click-status">
+            {rapidClickStatus}
+          </span>
+        </div>
       </div>
       <h2>Welcome to the UIDAI Portal</h2>
       <p>
@@ -346,14 +428,17 @@ const Home = ({ captureEnvironment, environmentData }) => {
         {currentUser.displayName ? currentUser.displayName : currentUser.email}
       </p>
       <br />
-      <div id="message">Interact naturally with the page... This page uses the </div>
+      <div id="message">
+        Interact naturally with the page... This page uses advanced techniques
+        to verify human behavior.
+      </div>
       <br />
       <div className="input-area">
         <label htmlFor="textInput">Type here for analysis:</label>
         <br />
-        <textarea 
-          id="textInput" 
-          rows="5" 
+        <textarea
+          id="textInput"
+          rows="5"
           cols="50"
           onKeyPress={handleKeyPress}
         ></textarea>
@@ -376,7 +461,11 @@ const Home = ({ captureEnvironment, environmentData }) => {
             <tbody>
               <tr>
                 <td>Email</td>
-                <td>{currentUser.displayName ? currentUser.displayName : currentUser.email}</td>
+                <td>
+                  {currentUser.displayName
+                    ? currentUser.displayName
+                    : currentUser.email}
+                </td>
               </tr>
               {environmentData.map((param, index) => (
                 <tr key={index}>
